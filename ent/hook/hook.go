@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"entgo.io/bug/ent"
+	"github.com/lrstanley/ent-bug-edge-migration-conflict/ent"
 )
 
 // The UserFunc type is an adapter to allow the use of ordinary
@@ -18,6 +18,19 @@ func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 	mv, ok := m.(*ent.UserMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The UserGuildFunc type is an adapter to allow the use of ordinary
+// function as UserGuild mutator.
+type UserGuildFunc func(context.Context, *ent.UserGuildMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f UserGuildFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.UserGuildMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserGuildMutation", m)
 	}
 	return f(ctx, mv)
 }

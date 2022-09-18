@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"entgo.io/bug/ent"
+	"github.com/lrstanley/ent-bug-edge-migration-conflict/ent"
 	// required by schema hooks.
-	_ "entgo.io/bug/ent/runtime"
+	_ "github.com/lrstanley/ent-bug-edge-migration-conflict/ent/runtime"
 
-	"entgo.io/bug/ent/migrate"
 	"entgo.io/ent/dialect/sql/schema"
+	"github.com/lrstanley/ent-bug-edge-migration-conflict/ent/migrate"
 )
 
 type (

@@ -8,12 +8,14 @@ import (
 	"fmt"
 	"log"
 
-	"entgo.io/bug/ent/migrate"
+	"github.com/lrstanley/ent-bug-edge-migration-conflict/ent/migrate"
 
-	"entgo.io/bug/ent/user"
+	"github.com/lrstanley/ent-bug-edge-migration-conflict/ent/user"
+	"github.com/lrstanley/ent-bug-edge-migration-conflict/ent/userguild"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // Client is the client that holds all ent builders.
@@ -23,6 +25,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// UserGuild is the client for interacting with the UserGuild builders.
+	UserGuild *UserGuildClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -37,6 +41,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.User = NewUserClient(c.config)
+	c.UserGuild = NewUserGuildClient(c.config)
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -68,9 +73,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		User:   NewUserClient(cfg),
+		ctx:       ctx,
+		config:    cfg,
+		User:      NewUserClient(cfg),
+		UserGuild: NewUserGuildClient(cfg),
 	}, nil
 }
 
@@ -88,9 +94,10 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		User:   NewUserClient(cfg),
+		ctx:       ctx,
+		config:    cfg,
+		User:      NewUserClient(cfg),
+		UserGuild: NewUserGuildClient(cfg),
 	}, nil
 }
 
@@ -120,6 +127,7 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	c.User.Use(hooks...)
+	c.UserGuild.Use(hooks...)
 }
 
 // UserClient is a client for the User schema.
@@ -207,7 +215,129 @@ func (c *UserClient) GetX(ctx context.Context, id int) *User {
 	return obj
 }
 
+// QueryGuilds queries the guilds edge of a User.
+func (c *UserClient) QueryGuilds(u *User) *UserGuildQuery {
+	query := &UserGuildQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(userguild.Table, userguild.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.GuildsTable, user.GuildsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *UserClient) Hooks() []Hook {
 	return c.hooks.User
+}
+
+// UserGuildClient is a client for the UserGuild schema.
+type UserGuildClient struct {
+	config
+}
+
+// NewUserGuildClient returns a client for the UserGuild from the given config.
+func NewUserGuildClient(c config) *UserGuildClient {
+	return &UserGuildClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `userguild.Hooks(f(g(h())))`.
+func (c *UserGuildClient) Use(hooks ...Hook) {
+	c.hooks.UserGuild = append(c.hooks.UserGuild, hooks...)
+}
+
+// Create returns a builder for creating a UserGuild entity.
+func (c *UserGuildClient) Create() *UserGuildCreate {
+	mutation := newUserGuildMutation(c.config, OpCreate)
+	return &UserGuildCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of UserGuild entities.
+func (c *UserGuildClient) CreateBulk(builders ...*UserGuildCreate) *UserGuildCreateBulk {
+	return &UserGuildCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for UserGuild.
+func (c *UserGuildClient) Update() *UserGuildUpdate {
+	mutation := newUserGuildMutation(c.config, OpUpdate)
+	return &UserGuildUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *UserGuildClient) UpdateOne(ug *UserGuild) *UserGuildUpdateOne {
+	mutation := newUserGuildMutation(c.config, OpUpdateOne, withUserGuild(ug))
+	return &UserGuildUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *UserGuildClient) UpdateOneID(id int) *UserGuildUpdateOne {
+	mutation := newUserGuildMutation(c.config, OpUpdateOne, withUserGuildID(id))
+	return &UserGuildUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for UserGuild.
+func (c *UserGuildClient) Delete() *UserGuildDelete {
+	mutation := newUserGuildMutation(c.config, OpDelete)
+	return &UserGuildDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *UserGuildClient) DeleteOne(ug *UserGuild) *UserGuildDeleteOne {
+	return c.DeleteOneID(ug.ID)
+}
+
+// DeleteOne returns a builder for deleting the given entity by its id.
+func (c *UserGuildClient) DeleteOneID(id int) *UserGuildDeleteOne {
+	builder := c.Delete().Where(userguild.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &UserGuildDeleteOne{builder}
+}
+
+// Query returns a query builder for UserGuild.
+func (c *UserGuildClient) Query() *UserGuildQuery {
+	return &UserGuildQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a UserGuild entity by its id.
+func (c *UserGuildClient) Get(ctx context.Context, id int) (*UserGuild, error) {
+	return c.Query().Where(userguild.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *UserGuildClient) GetX(ctx context.Context, id int) *UserGuild {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryAdmins queries the admins edge of a UserGuild.
+func (c *UserGuildClient) QueryAdmins(ug *UserGuild) *UserQuery {
+	query := &UserQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := ug.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(userguild.Table, userguild.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, userguild.AdminsTable, userguild.AdminsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(ug.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *UserGuildClient) Hooks() []Hook {
+	return c.hooks.UserGuild
 }

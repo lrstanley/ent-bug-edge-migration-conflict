@@ -6,10 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
-	"entgo.io/bug/ent/user"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/lrstanley/ent-bug-edge-migration-conflict/ent/user"
+	"github.com/lrstanley/ent-bug-edge-migration-conflict/ent/userguild"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -19,16 +21,217 @@ type UserCreate struct {
 	hooks    []Hook
 }
 
-// SetAge sets the "age" field.
-func (uc *UserCreate) SetAge(i int) *UserCreate {
-	uc.mutation.SetAge(i)
+// SetCreateTime sets the "create_time" field.
+func (uc *UserCreate) SetCreateTime(t time.Time) *UserCreate {
+	uc.mutation.SetCreateTime(t)
 	return uc
 }
 
-// SetName sets the "name" field.
-func (uc *UserCreate) SetName(s string) *UserCreate {
-	uc.mutation.SetName(s)
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCreateTime(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetCreateTime(*t)
+	}
 	return uc
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (uc *UserCreate) SetUpdateTime(t time.Time) *UserCreate {
+	uc.mutation.SetUpdateTime(t)
+	return uc
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (uc *UserCreate) SetNillableUpdateTime(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetUpdateTime(*t)
+	}
+	return uc
+}
+
+// SetUserID sets the "user_id" field.
+func (uc *UserCreate) SetUserID(s string) *UserCreate {
+	uc.mutation.SetUserID(s)
+	return uc
+}
+
+// SetAdmin sets the "admin" field.
+func (uc *UserCreate) SetAdmin(b bool) *UserCreate {
+	uc.mutation.SetAdmin(b)
+	return uc
+}
+
+// SetNillableAdmin sets the "admin" field if the given value is not nil.
+func (uc *UserCreate) SetNillableAdmin(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetAdmin(*b)
+	}
+	return uc
+}
+
+// SetUsername sets the "username" field.
+func (uc *UserCreate) SetUsername(s string) *UserCreate {
+	uc.mutation.SetUsername(s)
+	return uc
+}
+
+// SetDiscriminator sets the "discriminator" field.
+func (uc *UserCreate) SetDiscriminator(s string) *UserCreate {
+	uc.mutation.SetDiscriminator(s)
+	return uc
+}
+
+// SetEmail sets the "email" field.
+func (uc *UserCreate) SetEmail(s string) *UserCreate {
+	uc.mutation.SetEmail(s)
+	return uc
+}
+
+// SetAvatarHash sets the "avatar_hash" field.
+func (uc *UserCreate) SetAvatarHash(s string) *UserCreate {
+	uc.mutation.SetAvatarHash(s)
+	return uc
+}
+
+// SetNillableAvatarHash sets the "avatar_hash" field if the given value is not nil.
+func (uc *UserCreate) SetNillableAvatarHash(s *string) *UserCreate {
+	if s != nil {
+		uc.SetAvatarHash(*s)
+	}
+	return uc
+}
+
+// SetAvatarURL sets the "avatar_url" field.
+func (uc *UserCreate) SetAvatarURL(s string) *UserCreate {
+	uc.mutation.SetAvatarURL(s)
+	return uc
+}
+
+// SetLocale sets the "locale" field.
+func (uc *UserCreate) SetLocale(s string) *UserCreate {
+	uc.mutation.SetLocale(s)
+	return uc
+}
+
+// SetNillableLocale sets the "locale" field if the given value is not nil.
+func (uc *UserCreate) SetNillableLocale(s *string) *UserCreate {
+	if s != nil {
+		uc.SetLocale(*s)
+	}
+	return uc
+}
+
+// SetBot sets the "bot" field.
+func (uc *UserCreate) SetBot(b bool) *UserCreate {
+	uc.mutation.SetBot(b)
+	return uc
+}
+
+// SetNillableBot sets the "bot" field if the given value is not nil.
+func (uc *UserCreate) SetNillableBot(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetBot(*b)
+	}
+	return uc
+}
+
+// SetSystem sets the "system" field.
+func (uc *UserCreate) SetSystem(b bool) *UserCreate {
+	uc.mutation.SetSystem(b)
+	return uc
+}
+
+// SetNillableSystem sets the "system" field if the given value is not nil.
+func (uc *UserCreate) SetNillableSystem(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetSystem(*b)
+	}
+	return uc
+}
+
+// SetMfaEnabled sets the "mfa_enabled" field.
+func (uc *UserCreate) SetMfaEnabled(b bool) *UserCreate {
+	uc.mutation.SetMfaEnabled(b)
+	return uc
+}
+
+// SetNillableMfaEnabled sets the "mfa_enabled" field if the given value is not nil.
+func (uc *UserCreate) SetNillableMfaEnabled(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetMfaEnabled(*b)
+	}
+	return uc
+}
+
+// SetVerified sets the "verified" field.
+func (uc *UserCreate) SetVerified(b bool) *UserCreate {
+	uc.mutation.SetVerified(b)
+	return uc
+}
+
+// SetNillableVerified sets the "verified" field if the given value is not nil.
+func (uc *UserCreate) SetNillableVerified(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetVerified(*b)
+	}
+	return uc
+}
+
+// SetFlags sets the "flags" field.
+func (uc *UserCreate) SetFlags(i int) *UserCreate {
+	uc.mutation.SetFlags(i)
+	return uc
+}
+
+// SetNillableFlags sets the "flags" field if the given value is not nil.
+func (uc *UserCreate) SetNillableFlags(i *int) *UserCreate {
+	if i != nil {
+		uc.SetFlags(*i)
+	}
+	return uc
+}
+
+// SetPremiumType sets the "premium_type" field.
+func (uc *UserCreate) SetPremiumType(i int) *UserCreate {
+	uc.mutation.SetPremiumType(i)
+	return uc
+}
+
+// SetNillablePremiumType sets the "premium_type" field if the given value is not nil.
+func (uc *UserCreate) SetNillablePremiumType(i *int) *UserCreate {
+	if i != nil {
+		uc.SetPremiumType(*i)
+	}
+	return uc
+}
+
+// SetPublicFlags sets the "public_flags" field.
+func (uc *UserCreate) SetPublicFlags(i int) *UserCreate {
+	uc.mutation.SetPublicFlags(i)
+	return uc
+}
+
+// SetNillablePublicFlags sets the "public_flags" field if the given value is not nil.
+func (uc *UserCreate) SetNillablePublicFlags(i *int) *UserCreate {
+	if i != nil {
+		uc.SetPublicFlags(*i)
+	}
+	return uc
+}
+
+// AddGuildIDs adds the "guilds" edge to the UserGuild entity by IDs.
+func (uc *UserCreate) AddGuildIDs(ids ...int) *UserCreate {
+	uc.mutation.AddGuildIDs(ids...)
+	return uc
+}
+
+// AddGuilds adds the "guilds" edges to the UserGuild entity.
+func (uc *UserCreate) AddGuilds(u ...*UserGuild) *UserCreate {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uc.AddGuildIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -42,6 +245,7 @@ func (uc *UserCreate) Save(ctx context.Context) (*User, error) {
 		err  error
 		node *User
 	)
+	uc.defaults()
 	if len(uc.hooks) == 0 {
 		if err = uc.check(); err != nil {
 			return nil, err
@@ -105,13 +309,97 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (uc *UserCreate) defaults() {
+	if _, ok := uc.mutation.CreateTime(); !ok {
+		v := user.DefaultCreateTime()
+		uc.mutation.SetCreateTime(v)
+	}
+	if _, ok := uc.mutation.UpdateTime(); !ok {
+		v := user.DefaultUpdateTime()
+		uc.mutation.SetUpdateTime(v)
+	}
+	if _, ok := uc.mutation.Admin(); !ok {
+		v := user.DefaultAdmin
+		uc.mutation.SetAdmin(v)
+	}
+	if _, ok := uc.mutation.Bot(); !ok {
+		v := user.DefaultBot
+		uc.mutation.SetBot(v)
+	}
+	if _, ok := uc.mutation.System(); !ok {
+		v := user.DefaultSystem
+		uc.mutation.SetSystem(v)
+	}
+	if _, ok := uc.mutation.MfaEnabled(); !ok {
+		v := user.DefaultMfaEnabled
+		uc.mutation.SetMfaEnabled(v)
+	}
+	if _, ok := uc.mutation.Verified(); !ok {
+		v := user.DefaultVerified
+		uc.mutation.SetVerified(v)
+	}
+	if _, ok := uc.mutation.Flags(); !ok {
+		v := user.DefaultFlags
+		uc.mutation.SetFlags(v)
+	}
+	if _, ok := uc.mutation.PremiumType(); !ok {
+		v := user.DefaultPremiumType
+		uc.mutation.SetPremiumType(v)
+	}
+	if _, ok := uc.mutation.PublicFlags(); !ok {
+		v := user.DefaultPublicFlags
+		uc.mutation.SetPublicFlags(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (uc *UserCreate) check() error {
-	if _, ok := uc.mutation.Age(); !ok {
-		return &ValidationError{Name: "age", err: errors.New(`ent: missing required field "User.age"`)}
+	if _, ok := uc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "User.create_time"`)}
 	}
-	if _, ok := uc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "User.name"`)}
+	if _, ok := uc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "User.update_time"`)}
+	}
+	if _, ok := uc.mutation.UserID(); !ok {
+		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "User.user_id"`)}
+	}
+	if _, ok := uc.mutation.Username(); !ok {
+		return &ValidationError{Name: "username", err: errors.New(`ent: missing required field "User.username"`)}
+	}
+	if _, ok := uc.mutation.Discriminator(); !ok {
+		return &ValidationError{Name: "discriminator", err: errors.New(`ent: missing required field "User.discriminator"`)}
+	}
+	if v, ok := uc.mutation.Discriminator(); ok {
+		if err := user.DiscriminatorValidator(v); err != nil {
+			return &ValidationError{Name: "discriminator", err: fmt.Errorf(`ent: validator failed for field "User.discriminator": %w`, err)}
+		}
+	}
+	if _, ok := uc.mutation.Email(); !ok {
+		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "User.email"`)}
+	}
+	if v, ok := uc.mutation.Email(); ok {
+		if err := user.EmailValidator(v); err != nil {
+			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "User.email": %w`, err)}
+		}
+	}
+	if v, ok := uc.mutation.AvatarHash(); ok {
+		if err := user.AvatarHashValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_hash", err: fmt.Errorf(`ent: validator failed for field "User.avatar_hash": %w`, err)}
+		}
+	}
+	if _, ok := uc.mutation.AvatarURL(); !ok {
+		return &ValidationError{Name: "avatar_url", err: errors.New(`ent: missing required field "User.avatar_url"`)}
+	}
+	if v, ok := uc.mutation.AvatarURL(); ok {
+		if err := user.AvatarURLValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_url", err: fmt.Errorf(`ent: validator failed for field "User.avatar_url": %w`, err)}
+		}
+	}
+	if v, ok := uc.mutation.Locale(); ok {
+		if err := user.LocaleValidator(v); err != nil {
+			return &ValidationError{Name: "locale", err: fmt.Errorf(`ent: validator failed for field "User.locale": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -140,21 +428,160 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := uc.mutation.Age(); ok {
+	if value, ok := uc.mutation.CreateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeTime,
 			Value:  value,
-			Column: user.FieldAge,
+			Column: user.FieldCreateTime,
 		})
-		_node.Age = value
+		_node.CreateTime = value
 	}
-	if value, ok := uc.mutation.Name(); ok {
+	if value, ok := uc.mutation.UpdateTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: user.FieldUpdateTime,
+		})
+		_node.UpdateTime = value
+	}
+	if value, ok := uc.mutation.UserID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: user.FieldName,
+			Column: user.FieldUserID,
 		})
-		_node.Name = value
+		_node.UserID = value
+	}
+	if value, ok := uc.mutation.Admin(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: user.FieldAdmin,
+		})
+		_node.Admin = value
+	}
+	if value, ok := uc.mutation.Username(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldUsername,
+		})
+		_node.Username = value
+	}
+	if value, ok := uc.mutation.Discriminator(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldDiscriminator,
+		})
+		_node.Discriminator = value
+	}
+	if value, ok := uc.mutation.Email(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldEmail,
+		})
+		_node.Email = value
+	}
+	if value, ok := uc.mutation.AvatarHash(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldAvatarHash,
+		})
+		_node.AvatarHash = value
+	}
+	if value, ok := uc.mutation.AvatarURL(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldAvatarURL,
+		})
+		_node.AvatarURL = value
+	}
+	if value, ok := uc.mutation.Locale(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldLocale,
+		})
+		_node.Locale = value
+	}
+	if value, ok := uc.mutation.Bot(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: user.FieldBot,
+		})
+		_node.Bot = value
+	}
+	if value, ok := uc.mutation.System(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: user.FieldSystem,
+		})
+		_node.System = value
+	}
+	if value, ok := uc.mutation.MfaEnabled(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: user.FieldMfaEnabled,
+		})
+		_node.MfaEnabled = value
+	}
+	if value, ok := uc.mutation.Verified(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: user.FieldVerified,
+		})
+		_node.Verified = value
+	}
+	if value, ok := uc.mutation.Flags(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: user.FieldFlags,
+		})
+		_node.Flags = value
+	}
+	if value, ok := uc.mutation.PremiumType(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: user.FieldPremiumType,
+		})
+		_node.PremiumType = value
+	}
+	if value, ok := uc.mutation.PublicFlags(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: user.FieldPublicFlags,
+		})
+		_node.PublicFlags = value
+	}
+	if nodes := uc.mutation.GuildsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.GuildsTable,
+			Columns: user.GuildsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: userguild.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }
@@ -173,6 +600,7 @@ func (ucb *UserCreateBulk) Save(ctx context.Context) ([]*User, error) {
 	for i := range ucb.builders {
 		func(i int, root context.Context) {
 			builder := ucb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*UserMutation)
 				if !ok {

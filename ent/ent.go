@@ -7,10 +7,11 @@ import (
 	"errors"
 	"fmt"
 
-	"entgo.io/bug/ent/user"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/lrstanley/ent-bug-edge-migration-conflict/ent/user"
+	"github.com/lrstanley/ent-bug-edge-migration-conflict/ent/userguild"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -31,7 +32,8 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		user.Table: user.ValidColumn,
+		user.Table:      user.ValidColumn,
+		userguild.Table: userguild.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

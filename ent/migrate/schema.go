@@ -11,8 +11,23 @@ var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "age", Type: field.TypeInt},
-		{Name: "name", Type: field.TypeString},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
+		{Name: "user_id", Type: field.TypeString, Unique: true},
+		{Name: "admin", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "username", Type: field.TypeString},
+		{Name: "discriminator", Type: field.TypeString, Size: 4},
+		{Name: "email", Type: field.TypeString, Size: 320},
+		{Name: "avatar_hash", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "avatar_url", Type: field.TypeString, Size: 2048},
+		{Name: "locale", Type: field.TypeString, Nullable: true, Size: 10},
+		{Name: "bot", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "system", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "mfa_enabled", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "verified", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "flags", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "premium_type", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "public_flags", Type: field.TypeInt, Nullable: true, Default: 0},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
@@ -20,11 +35,60 @@ var (
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 	}
+	// UserGuildsColumns holds the columns for the "user_guilds" table.
+	UserGuildsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
+		{Name: "guild_id", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString, Size: 100},
+		{Name: "owner", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "admin", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "features", Type: field.TypeJSON, Nullable: true},
+		{Name: "icon_hash", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "icon_url", Type: field.TypeString, Size: 2048},
+		{Name: "permissions", Type: field.TypeUint64, Nullable: true, Default: 0},
+	}
+	// UserGuildsTable holds the schema information for the "user_guilds" table.
+	UserGuildsTable = &schema.Table{
+		Name:       "user_guilds",
+		Columns:    UserGuildsColumns,
+		PrimaryKey: []*schema.Column{UserGuildsColumns[0]},
+	}
+	// UserGuildsColumns holds the columns for the "user_guilds" table.
+	UserGuildsColumns = []*schema.Column{
+		{Name: "user_id", Type: field.TypeInt},
+		{Name: "user_guild_id", Type: field.TypeInt},
+	}
+	// UserGuildsTable holds the schema information for the "user_guilds" table.
+	UserGuildsTable = &schema.Table{
+		Name:       "user_guilds",
+		Columns:    UserGuildsColumns,
+		PrimaryKey: []*schema.Column{UserGuildsColumns[0], UserGuildsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_guilds_user_id",
+				Columns:    []*schema.Column{UserGuildsColumns[0]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "user_guilds_user_guild_id",
+				Columns:    []*schema.Column{UserGuildsColumns[1]},
+				RefColumns: []*schema.Column{UserGuildsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		UsersTable,
+		UserGuildsTable,
+		UserGuildsTable,
 	}
 )
 
 func init() {
+	UserGuildsTable.ForeignKeys[0].RefTable = UsersTable
+	UserGuildsTable.ForeignKeys[1].RefTable = UserGuildsTable
 }
